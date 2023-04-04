@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbx-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData() -- Just for resource restart (same as event handler)
 local radioMenu = false
 local onRadio = false
