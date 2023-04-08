@@ -7,8 +7,7 @@ version '1.0.0'
 shared_script 'config.lua'
 
 client_scripts {
-  'client.lua',
-  'animation.lua'
+  'client.lua'
 }
 
 server_script 'server.lua'
