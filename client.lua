@@ -89,7 +89,7 @@ RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     leaveradio()
 end)
 
-AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount) 
+AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount)
     if itemName ~= 'radio' then return end
     hasRadio = totalCount > 0
 end)
