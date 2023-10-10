@@ -9,8 +9,8 @@ shared_scripts {
     '@ox_lib/init.lua',
     '@qbx_core/import.lua',
     '@qbx_core/shared/locale.lua',
-    'locale/en.lua',
-    'locale/*.lua',
+    'locales/en.lua',
+    'locales/*.lua',
     'config.lua'
 }
 
