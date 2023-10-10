@@ -17,9 +17,9 @@ local function connectToRadio(channel)
     exports["pma-voice"]:setRadioChannel(channel)
     local subFreq = string.split(tostring(channel), '.')[2]
     if subFreq and subFreq ~= "" then
-        exports.qbx_core:Notify(Config.messages['joined_to_radio'] ..channel.. ' MHz', 'success')
+        exports.qbx_core:Notify(Lang:t('joined_radio')..channel..' MHz', 'success')
     else
-        exports.qbx_core:Notify(Config.messages['joined_to_radio'] ..channel.. '.00 MHz', 'success')
+        exports.qbx_core:Notify(Lang:t('joined_radio')..channel..'.00 MHz', 'success')
     end
 end
 
@@ -33,7 +33,7 @@ local function leaveradio()
     onRadio = false
     exports["pma-voice"]:setRadioChannel(0)
     exports["pma-voice"]:setVoiceProperty("radioEnabled", false)
-    exports.qbx_core:Notify(Config.messages['you_leave'] , 'error')
+    exports.qbx_core:Notify(Lang:t('left_channel'), 'error')
 end
 
 local function toggleRadioAnimation(pState)
@@ -114,25 +114,25 @@ end)
 RegisterNUICallback('joinRadio', function(data, cb)
     local rchannel = tonumber(data.channel)
     if not rchannel then
-        exports.qbx_core:Notify(Config.messages['invalid_radio'] , 'error')
+        exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
         cb("ok")
         return
     end
 
     if rchannel > Config.MaxFrequency or rchannel == 0 then
-        exports.qbx_core:Notify(Config.messages['invalid_radio'] , 'error')
+        exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
         cb("ok")
         return
     end
 
     if rchannel == radioChannel then
-        exports.qbx_core:Notify(Config.messages['you_on_radio'] , 'error')
+        exports.qbx_core:Notify(Lang:t('on_channel'), 'error')
         cb("ok")
         return
     end
 
     if Config.RestrictedChannels[rchannel] and not Config.RestrictedChannels[rchannel][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
-        exports.qbx_core:Notify(Config.messages['restricted_channel_error'], 'error')
+        exports.qbx_core:Notify(Lang:t('restricted_channel'), 'error')
         cb("ok")
         return
     end
@@ -142,7 +142,7 @@ end)
 
 RegisterNUICallback('leaveRadio', function(_, cb)
     if radioChannel == 0 then
-        exports.qbx_core:Notify(Config.messages['not_on_radio'], 'error')
+        exports.qbx_core:Notify(Lang:t('not_on_channel'), 'error')
     else
         leaveradio()
     end
@@ -152,10 +152,10 @@ end)
 RegisterNUICallback("volumeUp", function(_, cb)
 	if radioVolume <= 95 then
 		radioVolume = radioVolume + 5
-		exports.qbx_core:Notify(Config.messages["volume_radio"] .. radioVolume, "success")
+		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, "success")
 		exports["pma-voice"]:setRadioVolume(radioVolume)
 	else
-		exports.qbx_core:Notify(Config.messages["decrease_radio_volume"], "error")
+		exports.qbx_core:Notify(Lang:t('max_volume'), "error")
 	end
     cb('ok')
 end)
@@ -163,10 +163,10 @@ end)
 RegisterNUICallback("volumeDown", function(_, cb)
 	if radioVolume >= 10 then
 		radioVolume = radioVolume - 5
-		exports.qbx_core:Notify(Config.messages["volume_radio"] .. radioVolume, "success")
+		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, "success")
 		exports["pma-voice"]:setRadioVolume(radioVolume)
 	else
-		exports.qbx_core:Notify(Config.messages["increase_radio_volume"], "error")
+		exports.qbx_core:Notify(Lang:t('min_volume'), "error")
 	end
     cb('ok')
 end)
@@ -174,7 +174,7 @@ end)
 RegisterNUICallback("increaseradiochannel", function(_, cb)
     local newChannel = radioChannel + 1
     exports["pma-voice"]:setRadioChannel(newChannel)
-    exports.qbx_core:Notify(Config.messages["increase_decrease_radio_channel"] .. newChannel, "success")
+    exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, "success")
     cb("ok")
 end)
 
@@ -183,7 +183,7 @@ RegisterNUICallback("decreaseradiochannel", function(_, cb)
     local newChannel = radioChannel - 1
     if newChannel >= 1 then
         exports["pma-voice"]:setRadioChannel(newChannel)
-        exports.qbx_core:Notify(Config.messages["increase_decrease_radio_channel"] .. newChannel, "success")
+        exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, "success")
         cb("ok")
     end
 end)
