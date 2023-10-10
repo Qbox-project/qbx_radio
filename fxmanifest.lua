@@ -1,25 +1,27 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Radio'
+description 'QBX-Radio'
+repository 'https://github.com/Qbox-project/qbx_radio'
 version '1.0.0'
 
 shared_scripts {
-  '@ox_lib/init.lua',
-  '@qbx_core/import.lua',
-  'config.lua'
+    '@ox_lib/init.lua',
+    '@qbx_core/import.lua',
+    '@qbx_core/shared/locale.lua',
+    'locale/en.lua',
+    'locale/*.lua',
+    'config.lua'
 }
 
-client_scripts {
-  'client.lua'
-}
-
-modules {
-  'qbx_core:playerdata',
-  'qbx_core:utils',
-}
+client_script 'client.lua'
 
 server_script 'server.lua'
+
+modules {
+    'qbx_core:playerdata',
+    'qbx_core:utils',
+}
 
 ui_page('html/ui.html')
 
