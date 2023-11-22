@@ -1,3 +1,4 @@
+local config = require 'config.client'
 local radioMenu = false
 local onRadio = false
 local radioChannel = 0
@@ -5,18 +6,17 @@ local radioVolume = 50
 local hasRadio = false
 local radioProp = nil
 
---Function
 local function connectToRadio(channel)
     radioChannel = channel
     if onRadio then
-        exports["pma-voice"]:setRadioChannel(0)
+        exports['pma-voice']:setRadioChannel(0)
     else
         onRadio = true
-        exports["pma-voice"]:setVoiceProperty("radioEnabled", true)
+        exports['pma-voice']:setVoiceProperty('radioEnabled', true)
     end
-    exports["pma-voice"]:setRadioChannel(channel)
+    exports['pma-voice']:setRadioChannel(channel)
     local subFreq = string.split(tostring(channel), '.')[2]
-    if subFreq and subFreq ~= "" then
+    if subFreq and subFreq ~= '' then
         exports.qbx_core:Notify(Lang:t('joined_radio')..channel..' MHz', 'success')
     else
         exports.qbx_core:Notify(Lang:t('joined_radio')..channel..'.00 MHz', 'success')
@@ -24,27 +24,27 @@ local function connectToRadio(channel)
 end
 
 local function closeEvent()
-	TriggerEvent("InteractSound_CL:PlayOnOne","click",0.6)
+	TriggerEvent('InteractSound_CL:PlayOnOne','click',0.6)
 end
 
 local function leaveradio()
     closeEvent()
     radioChannel = 0
     onRadio = false
-    exports["pma-voice"]:setRadioChannel(0)
-    exports["pma-voice"]:setVoiceProperty("radioEnabled", false)
+    exports['pma-voice']:setRadioChannel(0)
+    exports['pma-voice']:setVoiceProperty('radioEnabled', false)
     exports.qbx_core:Notify(Lang:t('left_channel'), 'error')
 end
 
 local function toggleRadioAnimation(pState)
     lib.requestAnimDict('cellphone@')
 	if pState then
-		TriggerEvent("attachItemRadio","radio01")
-		TaskPlayAnim(cache.ped, "cellphone@", "cellphone_text_read_base", 2.0, 3.0, -1, 49, 0, 0, 0, 0)
+		TriggerEvent('attachItemRadio','radio01')
+		TaskPlayAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 3.0, -1, 49, 0, 0, 0, 0)
 		radioProp = CreateObject(`prop_cs_hand_radio`, 1.0, 1.0, 1.0, 1, 1, 0)
 		AttachEntityToEntity(radioProp, cache.ped, GetPedBoneIndex(cache.ped, 57005), 0.14, 0.01, -0.02, 110.0, 120.0, -15.0, 1, 0, 0, 0, 2, 1)
 	else
-		StopAnimTask(cache.ped, "cellphone@", "cellphone_text_read_base", 1.0)
+		StopAnimTask(cache.ped, 'cellphone@', 'cellphone_text_read_base', 1.0)
 		ClearPedTasks(cache.ped)
 		if radioProp ~= 0 then
 			DeleteObject(radioProp)
@@ -58,25 +58,24 @@ local function toggleRadio(toggle)
     SetNuiFocus(radioMenu, radioMenu)
     if radioMenu then
         toggleRadioAnimation(true)
-        SendNUIMessage({type = "open"})
+        SendNUIMessage({type = 'open'})
     else
         toggleRadioAnimation(false)
-        SendNUIMessage({type = "close"})
+        SendNUIMessage({type = 'close'})
     end
+end
+
+
+
+local function doRadioCheck()
+    hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
 end
 
 local function isRadioOn()
     return onRadio
 end
 
-local function doRadioCheck()
-    hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
-end
-
---Exports
-exports("IsRadioOn", isRadioOn)
-
---Events
+exports('IsRadioOn', isRadioOn)
 
 -- Handles state right when the player selects their character and location.
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
@@ -100,40 +99,39 @@ AddEventHandler('onResourceStart', function(resource)
     doRadioCheck()
 end)
 
-RegisterNetEvent('qb-radio:use', function()
+RegisterNetEvent('qbx_radio:client:use', function()
     toggleRadio(not radioMenu)
 end)
 
-RegisterNetEvent('qb-radio:onRadioDrop', function()
+RegisterNetEvent('qbx_radio:client"onRadioDrop', function()
     if radioChannel ~= 0 then
         leaveradio()
     end
 end)
 
--- NUI
 RegisterNUICallback('joinRadio', function(data, cb)
     local rchannel = tonumber(data.channel)
     if not rchannel then
         exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
-        cb("ok")
+        cb('ok')
         return
     end
 
-    if rchannel > Config.MaxFrequency or rchannel == 0 then
+    if rchannel > config.maxFrequency or rchannel == 0 then
         exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
-        cb("ok")
+        cb('ok')
         return
     end
 
     if rchannel == radioChannel then
         exports.qbx_core:Notify(Lang:t('on_channel'), 'error')
-        cb("ok")
+        cb('ok')
         return
     end
 
-    if Config.RestrictedChannels[rchannel] and not Config.RestrictedChannels[rchannel][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
+    if config.restrictedChannels[rchannel] and not config.restrictedChannels[rchannel][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
         exports.qbx_core:Notify(Lang:t('restricted_channel'), 'error')
-        cb("ok")
+        cb('ok')
         return
     end
 
@@ -146,59 +144,58 @@ RegisterNUICallback('leaveRadio', function(_, cb)
     else
         leaveradio()
     end
-    cb("ok")
+    cb('ok')
 end)
 
-RegisterNUICallback("volumeUp", function(_, cb)
+RegisterNUICallback('volumeUp', function(_, cb)
 	if radioVolume <= 95 then
 		radioVolume = radioVolume + 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, "success")
-		exports["pma-voice"]:setRadioVolume(radioVolume)
+		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+		exports['pma-voice']:setRadioVolume(radioVolume)
 	else
-		exports.qbx_core:Notify(Lang:t('max_volume'), "error")
+		exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
 	end
     cb('ok')
 end)
 
-RegisterNUICallback("volumeDown", function(_, cb)
+RegisterNUICallback('volumeDown', function(_, cb)
 	if radioVolume >= 10 then
 		radioVolume = radioVolume - 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, "success")
-		exports["pma-voice"]:setRadioVolume(radioVolume)
+		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+		exports['pma-voice']:setRadioVolume(radioVolume)
 	else
-		exports.qbx_core:Notify(Lang:t('min_volume'), "error")
+		exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
 	end
     cb('ok')
 end)
 
-RegisterNUICallback("increaseradiochannel", function(_, cb)
+RegisterNUICallback('increaseradiochannel', function(_, cb)
     local newChannel = radioChannel + 1
-    exports["pma-voice"]:setRadioChannel(newChannel)
-    exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, "success")
-    cb("ok")
+    exports['pma-voice']:setRadioChannel(newChannel)
+    exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, 'success')
+    cb('ok')
 end)
 
-RegisterNUICallback("decreaseradiochannel", function(_, cb)
+RegisterNUICallback('decreaseradiochannel', function(_, cb)
     if not onRadio then return end
     local newChannel = radioChannel - 1
     if newChannel >= 1 then
-        exports["pma-voice"]:setRadioChannel(newChannel)
-        exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, "success")
-        cb("ok")
+        exports['pma-voice']:setRadioChannel(newChannel)
+        exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, 'success')
+        cb('ok')
     end
 end)
 
 RegisterNUICallback('poweredOff', function(_, cb)
     leaveradio()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('escape', function(_, cb)
     toggleRadio(false)
-    cb("ok")
+    cb('ok')
 end)
 
---Main Thread
 CreateThread(function()
     while true do
         Wait(1000)
