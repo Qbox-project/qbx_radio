@@ -1,4 +1,4 @@
-local config = require 'config.client'
+local config = require 'config.shared'
 local radioMenu = false
 local onRadio = false
 local radioChannel = 0
