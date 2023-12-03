@@ -104,7 +104,7 @@ Before creating enhancement suggestions, please check [this list](#before-submit
 
 * **Make sure it doesn't already exist.** Sounds silly, but there's a lot of features built in to Qbox that people don't realize so take a look through the docs and stuff to make sure it's not already there.
 * **Check if there's already PR which provides that enhancement.**
-* **Determine which resource the enhancement should be suggested in.** Whichever resource the suggestion is about, is where it should go. If the suggestion is about Qbox as a whole, make the suggestion in the qbx_core repository.
+* **Determine which resource the enhancement should be suggested in.** Whichever resource the suggestion is about, is where it should go. If the suggestion is about Qbox as a whole, make the suggestion in the qbx-core repository.
 * **Perform a [cursory search](https://github.com/search?q=is%3Aissue+user%3Aqbox-project++&type=issues&state=open)** to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
 
 #### How Do I Submit A (Good) Enhancement Suggestion?
@@ -178,7 +178,7 @@ All lua code should be done using all the best practices of proper lua using the
 - All exported functions MUST include a properly annotated language server header. See https://github.com/sumneko/lua-language-server/wiki/Annotations
 - Use 4 Space indentation
 - Aim for lua 5.4 (include `lua54 'yes'` in the fxmanifest.lua)
-- Use `cache.ped` instead of `GetPlayerPed(-1)`
+- Use `PlayerPedId()` instead of `GetPlayerPed(-1)`
 - Use `#(vector3 - vector3)` instead of `GetDistanceBetweenCoords()`
 - Don't create unnecessary threads. always try to find a better method of triggering events
 - Don't repeat yourself.. if you're using the same operations in many different places convert them into a function with flexible variables
