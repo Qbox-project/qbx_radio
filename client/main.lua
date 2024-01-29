@@ -38,19 +38,18 @@ end
 
 local function toggleRadioAnimation(pState)
     lib.requestAnimDict('cellphone@')
-	if pState then
-		TriggerEvent('attachItemRadio','radio01')
-		TaskPlayAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 3.0, -1, 49, 0, 0, 0, 0)
-		radioProp = CreateObject(`prop_cs_hand_radio`, 1.0, 1.0, 1.0, 1, 1, 0)
-		AttachEntityToEntity(radioProp, cache.ped, GetPedBoneIndex(cache.ped, 57005), 0.14, 0.01, -0.02, 110.0, 120.0, -15.0, 1, 0, 0, 0, 2, 1)
-	else
-		StopAnimTask(cache.ped, 'cellphone@', 'cellphone_text_read_base', 1.0)
-		ClearPedTasks(cache.ped)
-		if radioProp ~= 0 then
-			DeleteObject(radioProp)
-			radioProp = 0
-		end
-	end
+    if pState then
+        TaskPlayAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 3.0, -1, 49, 0, 0, 0, 0)
+        radioProp = CreateObject(`prop_cs_hand_radio`, 1.0, 1.0, 1.0, 1, 1, 0)
+        AttachEntityToEntity(radioProp, cache.ped, GetPedBoneIndex(cache.ped, 57005), 0.14, 0.01, -0.02, 110.0, 120.0, -15.0, 1, 0, 0, 0, 2, 1)
+    else
+        StopAnimTask(cache.ped, 'cellphone@', 'cellphone_text_read_base', 1.0)
+        ClearPedTasks(cache.ped)
+        if radioProp ~= 0 then
+            DeleteObject(radioProp)
+            radioProp = 0
+        end
+    end
 end
 
 local function toggleRadio(toggle)
@@ -64,8 +63,6 @@ local function toggleRadio(toggle)
         SendNUIMessage({type = 'close'})
     end
 end
-
-
 
 local function doRadioCheck()
     hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
@@ -129,7 +126,7 @@ RegisterNUICallback('joinRadio', function(data, cb)
         return
     end
 
-    if config.restrictedChannels[rchannel] and not config.restrictedChannels[rchannel][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
+    if rchannel <= 11.0 and not (QBX.PlayerData.job.type == 'leo' or QBX.PlayerData.job.type == 'ems') and QBX.PlayerData.job.onduty then
         exports.qbx_core:Notify(Lang:t('restricted_channel'), 'error')
         cb('ok')
         return
@@ -148,24 +145,24 @@ RegisterNUICallback('leaveRadio', function(_, cb)
 end)
 
 RegisterNUICallback('volumeUp', function(_, cb)
-	if radioVolume <= 95 then
-		radioVolume = radioVolume + 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
-		exports['pma-voice']:setRadioVolume(radioVolume)
-	else
-		exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
-	end
+    if radioVolume <= 95 then
+        radioVolume = radioVolume + 5
+        exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+        exports['pma-voice']:setRadioVolume(radioVolume)
+    else
+        exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
+    end
     cb('ok')
 end)
 
 RegisterNUICallback('volumeDown', function(_, cb)
-	if radioVolume >= 10 then
-		radioVolume = radioVolume - 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
-		exports['pma-voice']:setRadioVolume(radioVolume)
-	else
-		exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
-	end
+    if radioVolume >= 10 then
+        radioVolume = radioVolume - 5
+        exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+        exports['pma-voice']:setRadioVolume(radioVolume)
+    else
+        exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
+    end
     cb('ok')
 end)
 
