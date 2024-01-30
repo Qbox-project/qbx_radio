@@ -15,8 +15,7 @@ local function connectToRadio(channel)
         exports['pma-voice']:setVoiceProperty('radioEnabled', true)
     end
     exports['pma-voice']:setRadioChannel(channel)
-    local subFreq = string.split(tostring(channel), '.')[2]
-    if subFreq and subFreq ~= '' then
+    if channel % 1 > 0 then
         exports.qbx_core:Notify(Lang:t('joined_radio')..channel..' MHz', 'success')
     else
         exports.qbx_core:Notify(Lang:t('joined_radio')..channel..'.00 MHz', 'success')
