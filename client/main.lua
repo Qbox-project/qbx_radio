@@ -152,7 +152,7 @@ RegisterNUICallback('volumeUp', function(_, cb)
 		return exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
 	end
 
-	radioVolume = radioVolume + 5
+	radioVolume += 5
 	exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
 	exports['pma-voice']:setRadioVolume(radioVolume)
 	cb('ok')
@@ -164,7 +164,7 @@ RegisterNUICallback('volumeDown', function(_, cb)
 		exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
 	end
 
-	radioVolume = radioVolume - 5
+	radioVolume -= 5
 	exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
 	exports['pma-voice']:setRadioVolume(radioVolume)
 	cb('ok')
