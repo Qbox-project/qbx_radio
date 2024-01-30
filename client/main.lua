@@ -102,7 +102,7 @@ RegisterNetEvent('qbx_radio:client:use', function()
     toggleRadio(not radioMenu)
 end)
 
-RegisterNetEvent('qbx_radio:client"onRadioDrop', function()
+RegisterNetEvent('qbx_radio:client:onRadioDrop', function()
     if radioChannel ~= 0 then
         leaveradio()
     end
@@ -147,29 +147,31 @@ RegisterNUICallback('leaveRadio', function(_, cb)
 end)
 
 RegisterNUICallback('volumeUp', function(_, cb)
-	if radioVolume <= 95 then
-		radioVolume = radioVolume + 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
-		exports['pma-voice']:setRadioVolume(radioVolume)
-	else
-		exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
+	if not onRadio then return cb('ok') end
+	if radioVolume > 95 then
+		return exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
 	end
-    cb('ok')
+
+	radioVolume = radioVolume + 5
+	exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+	exports['pma-voice']:setRadioVolume(radioVolume)
+	cb('ok')
 end)
 
 RegisterNUICallback('volumeDown', function(_, cb)
-	if radioVolume >= 10 then
-		radioVolume = radioVolume - 5
-		exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
-		exports['pma-voice']:setRadioVolume(radioVolume)
-	else
+	if not onRadio then return cb('ok') end
+	if radioVolume < 10 then
 		exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
 	end
-    cb('ok')
+
+	radioVolume = radioVolume - 5
+	exports.qbx_core:Notify(Lang:t('new_volume')..radioVolume, 'success')
+	exports['pma-voice']:setRadioVolume(radioVolume)
+	cb('ok')
 end)
 
 RegisterNUICallback('increaseradiochannel', function(_, cb)
-    if not onRadio then return end
+    if not onRadio then return cb('ok') end
     radioChannel += 1
     exports['pma-voice']:setRadioChannel(radioChannel)
     exports.qbx_core:Notify(Lang:t('new_channel')..radioChannel, 'success')
@@ -177,14 +179,13 @@ RegisterNUICallback('increaseradiochannel', function(_, cb)
 end)
 
 RegisterNUICallback('decreaseradiochannel', function(_, cb)
-    if not onRadio then return end
-    radioChannel -= 1
-    radioChannel = radioChannel < 1 and 1 or radioChannel
-    if radioChannel >= 1 then
-        exports['pma-voice']:setRadioChannel(radioChannel)
-        exports.qbx_core:Notify(Lang:t('new_channel')..radioChannel, 'success')
-        cb('ok')
-    end
+	if not onRadio then return cb('ok') end
+	radioChannel -= 1
+	radioChannel = radioChannel < 1 and 1 or radioChannel
+
+	exports['pma-voice']:setRadioChannel(radioChannel)
+	exports.qbx_core:Notify(Lang:t('new_channel')..radioChannel, 'success')
+	cb('ok')
 end)
 
 RegisterNUICallback('poweredOff', function(_, cb)
