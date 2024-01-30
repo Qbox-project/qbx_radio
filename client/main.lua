@@ -170,18 +170,20 @@ RegisterNUICallback('volumeDown', function(_, cb)
 end)
 
 RegisterNUICallback('increaseradiochannel', function(_, cb)
-    local newChannel = radioChannel + 1
-    exports['pma-voice']:setRadioChannel(newChannel)
-    exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, 'success')
+    if not onRadio then return end
+    radioChannel += 1
+    exports['pma-voice']:setRadioChannel(radioChannel)
+    exports.qbx_core:Notify(Lang:t('new_channel')..radioChannel, 'success')
     cb('ok')
 end)
 
 RegisterNUICallback('decreaseradiochannel', function(_, cb)
     if not onRadio then return end
-    local newChannel = radioChannel - 1
-    if newChannel >= 1 then
-        exports['pma-voice']:setRadioChannel(newChannel)
-        exports.qbx_core:Notify(Lang:t('new_channel')..newChannel, 'success')
+    radioChannel -= 1
+    radioChannel = radioChannel < 1 and 1 or radioChannel
+    if radioChannel >= 1 then
+        exports['pma-voice']:setRadioChannel(radioChannel)
+        exports.qbx_core:Notify(Lang:t('new_channel')..radioChannel, 'success')
         cb('ok')
     end
 end)
