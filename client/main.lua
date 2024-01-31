@@ -109,18 +109,13 @@ RegisterNetEvent('qbx_radio:client:onRadioDrop', function()
 end)
 
 RegisterNUICallback('joinRadio', function(data, cb)
-    local rchannel = qbx.math.round(tonumber(data.channel), config.decimalPlaces)
-    if not rchannel then
+    local rchannel = tonumber(data.channel)
+    if not rchannel or type(rchannel) ~= "number" or rchannel > config.maxFrequency or rchannel < 1 then
         exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
         cb('ok')
         return
     end
-
-    if rchannel > config.maxFrequency or rchannel == 0 then
-        exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
-        cb('ok')
-        return
-    end
+    rchannel = qbx.math.round(rchannel, config.decimalPlaces)
 
     if rchannel == radioChannel then
         exports.qbx_core:Notify(Lang:t('on_channel'), 'error')
@@ -150,7 +145,8 @@ end)
 RegisterNUICallback('volumeUp', function(_, cb)
 	if not onRadio then return cb('ok') end
 	if radioVolume > 95 then
-		return exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
+        exports.qbx_core:Notify(Lang:t('max_volume'), 'error')
+	    return
 	end
 
 	radioVolume += 5
@@ -162,7 +158,8 @@ end)
 RegisterNUICallback('volumeDown', function(_, cb)
 	if not onRadio then return cb('ok') end
 	if radioVolume < 10 then
-		exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
+        exports.qbx_core:Notify(Lang:t('min_volume'), 'error')
+		return
 	end
 
 	radioVolume -= 5
