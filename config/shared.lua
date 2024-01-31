@@ -4,8 +4,8 @@ return {
     -- If false restrictedChannels restricts all decimals, if true you need to manually add each subchannel (100.01, 100.02 etc)
     whitelistSubChannels = false,
 
-    ---@type number | false
-    -- How many decimal places to use for the channel. Can be false to allow the full range of decimals (e.g. 100.123456789...)
+    ---@type number
+    -- How many decimal places to use for the channel.
     decimalPlaces = 2,
 
     ---@alias channelNumber number

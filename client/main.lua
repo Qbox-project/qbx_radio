@@ -109,7 +109,7 @@ RegisterNetEvent('qbx_radio:client:onRadioDrop', function()
 end)
 
 RegisterNUICallback('joinRadio', function(data, cb)
-    local rchannel = config.decimalPlaces and qbx.math.round(tonumber(data.channel), config.decimalPlaces) or tonumber(data.channel)
+    local rchannel = qbx.math.round(tonumber(data.channel), config.decimalPlaces)
     if not rchannel then
         exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
         cb('ok')
