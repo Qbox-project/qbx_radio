@@ -5,7 +5,7 @@ return {
     whitelistSubChannels = false,
 
     ---@type number
-    -- How many decimal places to use for the channel.
+    -- How many decimal places to use for the subchannel.
     decimalPlaces = 2,
 
     ---@alias channelNumber number
