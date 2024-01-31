@@ -4,7 +4,6 @@ local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
 local hasRadio = false
-local radioProp = nil
 
 local function connectToRadio(channel)
     radioChannel = channel
@@ -35,36 +34,18 @@ local function leaveradio()
     exports.qbx_core:Notify(Lang:t('left_channel'), 'error')
 end
 
-local function toggleRadioAnimation(pState)
-    lib.requestAnimDict('cellphone@')
-	if pState then
-		TriggerEvent('attachItemRadio','radio01')
-		TaskPlayAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 3.0, -1, 49, 0, 0, 0, 0)
-		radioProp = CreateObject(`prop_cs_hand_radio`, 1.0, 1.0, 1.0, 1, 1, 0)
-		AttachEntityToEntity(radioProp, cache.ped, GetPedBoneIndex(cache.ped, 57005), 0.14, 0.01, -0.02, 110.0, 120.0, -15.0, 1, 0, 0, 0, 2, 1)
-	else
-		StopAnimTask(cache.ped, 'cellphone@', 'cellphone_text_read_base', 1.0)
-		ClearPedTasks(cache.ped)
-		if radioProp ~= 0 then
-			DeleteObject(radioProp)
-			radioProp = 0
-		end
-	end
-end
 
 local function toggleRadio(toggle)
     radioMenu = toggle
     SetNuiFocus(radioMenu, radioMenu)
     if radioMenu then
-        toggleRadioAnimation(true)
+        exports.scully_emotemenu:playEmoteByCommand('wt')
         SendNUIMessage({type = 'open'})
     else
-        toggleRadioAnimation(false)
+        exports.scully_emotemenu:cancelEmote()
         SendNUIMessage({type = 'close'})
     end
 end
-
-
 
 local function doRadioCheck()
     hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
