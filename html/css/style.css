@@ -39,10 +39,6 @@ body {
   transition: all 0.1s linear;
 }
 
-#submit:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
 #disconnect {
   position: absolute;
   width: 2.2vh;
@@ -53,11 +49,7 @@ body {
   transition: all 0.1s linear;
 }
 
-#disconnect:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-#volumeUp {
+#volumeDown {
   position: absolute;
   width: 3.3vh;
   height: 1.9vh;
@@ -67,11 +59,7 @@ body {
   transition: all 0.1s linear;
 }
 
-#volumeUp:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-#volumeDown {
+#volumeUp {
   position: absolute;
   width: 3.3vh;
   height: 1.9vh;
@@ -79,10 +67,6 @@ body {
   left: 4.0vh;
   border-radius: 5px;
   transition: all 0.1s linear;
-}
-
-#volumeDown:hover {
-  background: rgba(255, 255, 255, 0.25);
 }
 
 #increaseradiochannel {
@@ -95,10 +79,6 @@ body {
   transition: all 0.1s linear;
 }
 
-#increaseradiochannel:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
 #decreaseradiochannel {
   position: absolute;
   width: 3.3vh;
@@ -107,10 +87,6 @@ body {
   left: 0.0vh;
   border-radius: 5px;
   transition: all 0.1s linear;
-}
-
-#decreaseradiochannel:hover {
-  background: rgba(255, 255, 255, 0.25);
 }
 
 #poweredOff {
@@ -123,9 +99,9 @@ body {
   transition: all 0.1s linear;
 }
 
-#poweredOff:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
+#submit:hover, #disconnect:hover, #volumeUp:hover, #volumeDown:hover, #increaseradiochannel:hover, #decreaseradiochannel:hover, #poweredOff:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
 
 .onoff button {
   padding: 40px 55px;
