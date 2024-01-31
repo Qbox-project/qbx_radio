@@ -1,5 +1,12 @@
 return {
     maxFrequency = 500, -- Max amount of available channel frequencies to use
+    
+    -- If false restrictedChannels restricts all decimals, if true you need to manually add each subchannel (100.01, 100.02 etc)
+    whitelistSubChannels = false,
+
+    ---@type number | false
+    -- How many decimal places to use for the channel. Can be false to allow the full range of decimals (e.g. 100.123456789...)
+    decimalPlaces = 2,
 
     ---@alias channelNumber number
     ---@type table<channelNumber, {jobName: boolean, jobName2: boolean}>

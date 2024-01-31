@@ -109,7 +109,7 @@ RegisterNetEvent('qbx_radio:client:onRadioDrop', function()
 end)
 
 RegisterNUICallback('joinRadio', function(data, cb)
-    local rchannel = tonumber(data.channel)
+    local rchannel = config.decimalPlaces and math.floor(tonumber(data.channel) * (10 ^ config.decimalPlaces)) or tonumber(data.channel)
     if not rchannel then
         exports.qbx_core:Notify(Lang:t('invalid_channel'), 'error')
         cb('ok')
@@ -128,7 +128,8 @@ RegisterNUICallback('joinRadio', function(data, cb)
         return
     end
 
-    if config.restrictedChannels[rchannel] and not config.restrictedChannels[rchannel][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty then
+    local frequency = not config.whitelistSubChannels and math.floor(rchannel) or rchannel
+    if config.restrictedChannels[frequency] and (not config.restrictedChannels[frequency][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty) then
         exports.qbx_core:Notify(Lang:t('restricted_channel'), 'error')
         cb('ok')
         return
