@@ -3,7 +3,6 @@ local radioMenu = false
 local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
-local hasRadio = false
 local radioProp = nil
 
 local function connectToRadio(channel)
@@ -64,38 +63,22 @@ local function toggleRadio(toggle)
     end
 end
 
-
-
-local function doRadioCheck()
-    hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
-end
-
 local function isRadioOn()
     return onRadio
 end
 
 exports('IsRadioOn', isRadioOn)
 
--- Handles state right when the player selects their character and location.
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    doRadioCheck()
-end)
-
 -- Resets state on logout, in case of character change.
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    hasRadio = false
     leaveradio()
 end)
 
 AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount)
     if itemName ~= 'radio' then return end
-    hasRadio = totalCount > 0
-end)
-
--- Handles state if resource is restarted live.
-AddEventHandler('onResourceStart', function(resource)
-    if GetCurrentResourceName() ~= resource then return end
-    doRadioCheck()
+    if not totalCount > 0 and radioChannel ~= 0 then
+        leaveradio()
+    end
 end)
 
 RegisterNetEvent('qbx_radio:client:use', function()
@@ -196,15 +179,10 @@ RegisterNUICallback('escape', function(_, cb)
     cb('ok')
 end)
 
-CreateThread(function()
-    while true do
-        Wait(1000)
-        if LocalPlayer.state.isLoggedIn and onRadio then
-            if not hasRadio or QBX.PlayerData.metadata.isdead or QBX.PlayerData.metadata.inlaststand then
-                if radioChannel ~= 0 then
-                    leaveradio()
-                end
-            end
+if config.leaveOnDeath then
+    AddStateBagChangeHandler('isDead', ('player:%s'):format(cache.serverId), function(_, _, value)
+        if value and onRadio and radioChannel ~= 0 then
+            leaveradio()
         end
-    end
-end)
+    end)
+end
