@@ -12,6 +12,11 @@ local function connectToRadio(channel)
     else
         onRadio = true
         exports['pma-voice']:setVoiceProperty('radioEnabled', true)
+        qbx.playAudio({
+            audioName = 'Start_Squelch',
+            audioRef = 'CB_RADIO_SFX',
+            source = cache.ped
+        })
     end
     exports['pma-voice']:setRadioChannel(channel)
     if channel % 1 > 0 then
@@ -21,12 +26,12 @@ local function connectToRadio(channel)
     end
 end
 
-local function closeEvent()
-	TriggerEvent('InteractSound_CL:PlayOnOne','click',0.6)
-end
-
 local function leaveradio()
-    closeEvent()
+    qbx.playAudio({
+        audioName = 'End_Squelch',
+        audioRef = 'CB_RADIO_SFX',
+        source = cache.ped
+    })
     radioChannel = 0
     onRadio = false
     exports['pma-voice']:setRadioChannel(0)
