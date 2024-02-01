@@ -12,7 +12,6 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
     document.onkeyup = function (data) {
-        console.log(data);
         if (data.key == "Escape") {
             fetch(`https://${GetParentResourceName()}/escape`, {
                 method: 'POST',
