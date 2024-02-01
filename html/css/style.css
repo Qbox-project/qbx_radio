@@ -1,139 +1,136 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 
 body {
-    position: relative;
-    font-family: sans-serif;
-    overflow: hidden;
-    top: 0;
-    padding: 0;
-    margin: 0;
+	position: relative;
+	font-family: sans-serif;
+	overflow: hidden;
+	top: 0;
+	padding: 0;
+	margin: 0;
 }
 
-.container {
-  height: 100vh;
-  display:none;
+#container {
+	height: 100vh;
+	display: none;
 }
 
-.radio-container {
-  position: absolute;
-  bottom: -56vh;
-  right: 15vh;
+#radio-container {
+	position: absolute;
+	bottom: -56vh;
+	right: 15vh;
 }
 
 .radio {
-  width: 18vh;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-  user-select: none;
+	width: 18vh;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+#submit,
+#disconnect {
+	position: absolute;
+	width: 2.2vh;
+	height: 3.2vh;
+	bottom: 14vh;
+	border-radius: 5px;
+	transition: all 0.1s linear;
 }
 
 #submit {
-  position: absolute;
-  width: 2.2vh;
-  height: 3.2vh;
-  bottom: 14vh;
-  left: 4.2vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	left: 4.2vh;
 }
 
 #disconnect {
-  position: absolute;
-  width: 2.2vh;
-  height: 3.2vh;
-  bottom: 14vh;
-  right: 3.2vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	right: 3.2vh;
+}
+
+#volumeDown,
+#volumeUp {
+	bottom: 18vh;
 }
 
 #volumeDown {
-  position: absolute;
-  width: 3.3vh;
-  height: 1.9vh;
-  bottom: 18vh;
-  right: 3.1vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	right: 3.1vh;
 }
 
 #volumeUp {
-  position: absolute;
-  width: 3.3vh;
-  height: 1.9vh;
-  bottom: 18vh;
-  left: 4.0vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	left: 4.0vh;
+}
+
+#increaseradiochannel,
+#decreaseradiochannel {
+	left: 0.0vh;
 }
 
 #increaseradiochannel {
-  position: absolute;
-  width: 3.3vh;
-  height: 1.9vh;
-  bottom: 30vh;
-  left: 0.0vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	bottom: 30vh;
 }
 
 #decreaseradiochannel {
-  position: absolute;
-  width: 3.3vh;
-  height: 1.9vh;
-  bottom: 18vh;
-  left: 0.0vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	bottom: 18vh;
+}
+
+#volumeDown,
+#volumeUp,
+#increaseradiochannel,
+#decreaseradiochannel,
+#poweredOff {
+	position: absolute;
+	width: 3.3vh;
+	height: 1.9vh;
+	border-radius: 5px;
+	transition: all 0.1s linear;
 }
 
 #poweredOff {
-  position: absolute;
-  width: 3.3vh;
-  height: 2.9vh;
-  bottom: 50vh;
-  left: 0.0vh;
-  border-radius: 5px;
-  transition: all 0.1s linear;
+	bottom: 50vh;
+	left: 0.0vh;
 }
 
-#submit:hover, #disconnect:hover, #volumeUp:hover, #volumeDown:hover, #increaseradiochannel:hover, #decreaseradiochannel:hover, #poweredOff:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
+#volumeUp:hover,
+#volumeDown:hover,
+#disconnect:hover,
+#submit:hover,
+#poweredOff:hover,
+#decreaseradiochannel:hover,
+#increaseradiochannel:hover {
+	background: rgba(255, 255, 255, 0.25);
+}
 
 .onoff button {
-  padding: 40px 55px;
-  opacity: .0;
+	padding: 40px 55px;
+	opacity: .0;
 }
 
 .channel {
-  position: absolute;
-  bottom: 24vh;
-  left: 5.3vh;
-  background: none;
+	position: absolute;
+	bottom: 24vh;
+	left: 5.3vh;
+	background: none;
 }
 
 ::-webkit-input-placeholder {
-  color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .channel span {
-  text-align: center;
-  color: rgba(0, 0, 0, 0.75);
+	text-align: center;
+	color: rgba(0, 0, 0, 0.75);
 }
 
 .channel input {
-  text-align: center;
-  border: none;
-  font-size: 25px;
-  background: none;
-  outline: none;
-  font-family: 'Fira Code', monospace;
-  width: 5vw;
+	text-align: center;
+	border: none;
+	font-size: 25px;
+	background: none;
+	outline: none;
+	font-family: 'Fira Code', monospace;
+	width: 5vw;
 }
 
 ::-webkit-inner-spin-button {
-  display: none;
+	display: none;
 }

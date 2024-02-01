@@ -20,10 +20,10 @@ client_scripts {
 
 server_script 'server/main.lua'
 
-ui_page('html/ui.html')
+ui_page "html/index.html"
 
 files {
-    'html/ui.html',
+    'html/index.html',
     'html/js/script.js',
     'html/css/style.css',
     'html/img/radio.png',
