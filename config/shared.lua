@@ -8,6 +8,9 @@ return {
     -- How many decimal places to use for the subchannel.
     decimalPlaces = 2,
 
+    -- Should the radio turn off when the player is dead (Talking is disabled anyway)
+    leaveOnDeath = true,
+    
     ---@alias channelNumber number
     ---@type table<channelNumber, {jobName: boolean, jobName2: boolean}>
     restrictedChannels = {
