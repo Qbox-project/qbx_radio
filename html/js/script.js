@@ -1,4 +1,4 @@
-var QBRadio = {};
+let QBRadio = {};
 
 window.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('message', function (event) {
