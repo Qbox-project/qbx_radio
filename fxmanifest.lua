@@ -27,7 +27,7 @@ files {
     'html/js/script.js',
     'html/css/style.css',
     'html/img/radio.png',
-    'config/shared.lua',
+    'config/*.lua',
 }
 
 lua54 'yes'

@@ -1,4 +1,5 @@
-local config = require 'config.shared'
+local config = require 'config.client'
+local sharedConfig = require 'config.shared'
 local radioMenu = false
 local onRadio = false
 local radioChannel = 0
@@ -106,8 +107,8 @@ RegisterNUICallback('joinRadio', function(data, cb)
         return
     end
 
-    local frequency = not config.whitelistSubChannels and math.floor(rchannel) or rchannel
-    if config.restrictedChannels[frequency] and (not config.restrictedChannels[frequency][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty) then
+    local frequency = not sharedConfig.whitelistSubChannels and math.floor(rchannel) or rchannel
+    if sharedConfig.restrictedChannels[frequency] and (not sharedConfig.restrictedChannels[frequency][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty) then
         exports.qbx_core:Notify(Lang:t('restricted_channel'), 'error')
         cb('ok')
         return
