@@ -65,7 +65,7 @@ end)
 
 AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount)
     if itemName ~= 'radio' then return end
-    if not totalCount > 0 and radioChannel ~= 0 then
+    if not (totalCount > 0) and radioChannel ~= 0 then
         leaveradio()
     end
 end)
