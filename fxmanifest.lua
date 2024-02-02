@@ -5,12 +5,10 @@ description 'qbx_radio'
 repository 'https://github.com/Qbox-project/qbx_radio'
 version '1.0.0'
 
+ox_lib 'locale'
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/modules/utils.lua',
-    '@qbx_core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
+    '@qbx_core/modules/lib.lua'
 }
 
 client_scripts {
@@ -28,6 +26,7 @@ files {
     'html/css/style.css',
     'html/img/radio.png',
     'config/*.lua',
+    'locales/*.json'
 }
 
 lua54 'yes'
