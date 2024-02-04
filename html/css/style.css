@@ -39,6 +39,10 @@ body {
   left: 7.5vh;
 }
 
+#toggleClicks:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 #submit {
   position: absolute;
   width: 2.2vh;
