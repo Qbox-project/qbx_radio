@@ -8,5 +8,7 @@
     "min_volume": "The radio is already set to the lowest volume",
     "max_volume": "he radio is already set to maximum volume",
     "new_volume": "New volume: ",
-    "new_channel": "New channel: "
+    "new_channel": "New channel: ",
+    "clicksOn": "Mic clicks are now on",
+    "clicksOff": "Mic clicks are now off"
 }

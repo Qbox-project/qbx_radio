@@ -8,5 +8,7 @@
     "min_volume": "Cette radio est déjà au volume minimum",
     "max_volume": "Cette radio est déjà au volume maximum",
     "new_volume": "Nouveau volume : ",
-    "new_channel": "Nouvelle fréquence : "
+    "new_channel": "Nouvelle fréquence : ",
+    "clicksOn": "Clicks radio activés",
+    "clicksOff": "Clicks radio désactivés"
 }
