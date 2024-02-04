@@ -175,14 +175,14 @@ end)
 
 RegisterNUICallback('toggleClicks', function(_, cb)
     micClicks = not micClicks
-	exports['pma-voice']:setVoiceProperty("micClicks", micClicks)
+    exports['pma-voice']:setVoiceProperty("micClicks", micClicks)
     qbx.playAudio({
         audioName = "Off_High",
         audioRef = 'MP_RADIO_SFX',
         source = cache.ped
     })
     exports.qbx_core:Notify(locale('clicks'..(micClicks and 'On' or 'Off')), micClicks and 'success' or 'error')
-	cb('ok')
+    cb('ok')
 end)
 
 RegisterNUICallback('poweredOff', function(_, cb)
