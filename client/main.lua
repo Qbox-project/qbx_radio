@@ -28,18 +28,19 @@ local function connectToRadio(channel)
 end
 
 local function leaveradio()
-    qbx.playAudio({
-        audioName = 'End_Squelch',
-        audioRef = 'CB_RADIO_SFX',
-        source = cache.ped
-    })
+    if onRadio then
+        qbx.playAudio({
+            audioName = 'End_Squelch',
+            audioRef = 'CB_RADIO_SFX',
+            source = cache.ped
+        })
+        exports.qbx_core:Notify(locale('left_channel'), 'error')
+    end
     radioChannel = 0
     onRadio = false
     exports['pma-voice']:setRadioChannel(0)
     exports['pma-voice']:setVoiceProperty('radioEnabled', false)
-    exports.qbx_core:Notify(locale('left_channel'), 'error')
 end
-
 
 local function toggleRadio(toggle)
     radioMenu = toggle
