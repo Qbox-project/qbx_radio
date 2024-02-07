@@ -28,6 +28,13 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    document.getElementById('toggleClicks').addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch(`https://${GetParentResourceName()}/toggleClicks`, {
+            method: 'POST',
+        });
+    });
+
     document.getElementById('submit').addEventListener('click', function (e) {
         e.preventDefault();
         fetch(`https://${GetParentResourceName()}/joinRadio`, {
