@@ -4,7 +4,7 @@ local radioMenu = false
 local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
-local micClicks = true
+local micClicks = config.defaultMicClicks
 
 local function connectToRadio(channel)
     radioChannel = channel
