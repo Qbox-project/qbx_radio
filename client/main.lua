@@ -4,7 +4,7 @@ local radioMenu = false
 local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
-local micClicks = true
+local micClicks = config.defaultMicClicks
 
 local function connectToRadio(channel)
     radioChannel = channel
@@ -59,6 +59,11 @@ local function isRadioOn()
 end
 
 exports('IsRadioOn', isRadioOn)
+
+-- Sets mic clicks to the default value when the player logs in.
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    exports['pma-voice']:setVoiceProperty("micClicks", config.defaultMicClicks)
+end)
 
 -- Resets state on logout, in case of character change.
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
