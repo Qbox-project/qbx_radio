@@ -4,6 +4,7 @@ local radioMenu = false
 local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
+local micClicks = true
 
 local function connectToRadio(channel)
     radioChannel = channel
@@ -156,6 +157,18 @@ RegisterNUICallback('decreaseradiochannel', function(_, cb)
 	exports['pma-voice']:setRadioChannel(radioChannel)
 	exports.qbx_core:Notify(locale('new_channel')..radioChannel, 'success')
 	cb('ok')
+end)
+
+RegisterNUICallback('toggleClicks', function(_, cb)
+    micClicks = not micClicks
+    exports['pma-voice']:setVoiceProperty("micClicks", micClicks)
+    qbx.playAudio({
+        audioName = "Off_High",
+        audioRef = 'MP_RADIO_SFX',
+        source = cache.ped
+    })
+    exports.qbx_core:Notify(locale('clicks'..(micClicks and 'On' or 'Off')), micClicks and 'success' or 'error')
+    cb('ok')
 end)
 
 RegisterNUICallback('poweredOff', function(_, cb)
