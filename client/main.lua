@@ -1,9 +1,9 @@
-local config = require 'config.shared'
+local config = require 'config.client'
+local sharedConfig = require 'config.shared'
 local radioMenu = false
 local onRadio = false
 local radioChannel = 0
 local radioVolume = 50
-local hasRadio = false
 local micClicks = true
 
 local function connectToRadio(channel)
@@ -53,36 +53,22 @@ local function toggleRadio(toggle)
     end
 end
 
-local function doRadioCheck()
-    hasRadio = exports.ox_inventory:Search('count', 'radio') > 0
-end
-
 local function isRadioOn()
     return onRadio
 end
 
 exports('IsRadioOn', isRadioOn)
 
--- Handles state right when the player selects their character and location.
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    doRadioCheck()
-end)
-
 -- Resets state on logout, in case of character change.
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    hasRadio = false
     leaveradio()
 end)
 
 AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount)
     if itemName ~= 'radio' then return end
-    hasRadio = totalCount > 0
-end)
-
--- Handles state if resource is restarted live.
-AddEventHandler('onResourceStart', function(resource)
-    if GetCurrentResourceName() ~= resource then return end
-    doRadioCheck()
+    if totalCount <= 0 and radioChannel ~= 0 then
+        leaveradio()
+    end
 end)
 
 RegisterNetEvent('qbx_radio:client:use', function()
@@ -110,8 +96,8 @@ RegisterNUICallback('joinRadio', function(data, cb)
         return
     end
 
-    local frequency = not config.whitelistSubChannels and math.floor(rchannel) or rchannel
-    if config.restrictedChannels[frequency] and (not config.restrictedChannels[frequency][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty) then
+    local frequency = not sharedConfig.whitelistSubChannels and math.floor(rchannel) or rchannel
+    if sharedConfig.restrictedChannels[frequency] and (not sharedConfig.restrictedChannels[frequency][QBX.PlayerData.job.name] or not QBX.PlayerData.job.onduty) then
         exports.qbx_core:Notify(locale('restricted_channel'), 'error')
         cb('ok')
         return
@@ -195,15 +181,10 @@ RegisterNUICallback('escape', function(_, cb)
     cb('ok')
 end)
 
-CreateThread(function()
-    while true do
-        Wait(1000)
-        if LocalPlayer.state.isLoggedIn and onRadio then
-            if not hasRadio or QBX.PlayerData.metadata.isdead or QBX.PlayerData.metadata.inlaststand then
-                if radioChannel ~= 0 then
-                    leaveradio()
-                end
-            end
+if config.leaveOnDeath then
+    AddStateBagChangeHandler('isDead', ('player:%s'):format(cache.serverId), function(_, _, value)
+        if value and onRadio and radioChannel ~= 0 then
+            leaveradio()
         end
-    end
-end)
+    end)
+end
