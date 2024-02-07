@@ -49,10 +49,6 @@ body {
   left: 7.5vh;
 }
 
-#toggleClicks:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
 #submit {
 	left: 4.2vh;
 }
@@ -110,7 +106,8 @@ body {
 #submit:hover,
 #poweredOff:hover,
 #decreaseradiochannel:hover,
-#increaseradiochannel:hover {
+#increaseradiochannel:hover,
+#toggleClicks:hover {
 	background: rgba(255, 255, 255, 0.25);
 }
 
