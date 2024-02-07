@@ -1,96 +1,123 @@
-$(function() {
-    window.addEventListener('message', function(event) {
+let QBRadio = {};
+
+window.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener('message', function (event) {
         if (event.data.type == "open") {
-            QBRadio.SlideUp()
+            QBRadio.SlideUp();
         }
 
         if (event.data.type == "close") {
-            QBRadio.SlideDown()
+            QBRadio.SlideDown();
         }
     });
 
     document.onkeyup = function (data) {
-        if (data.which == 27) { // Escape key
-            $.post(`https://${GetParentResourceName()}/escape`, JSON.stringify({}));
-            QBRadio.SlideDown()
-        } else if (data.which == 13) { // Enter key
-            $.post(`https://${GetParentResourceName()}/joinRadio`, JSON.stringify({
-                channel: $("#channel").val()
-            }));
+        if (data.key == "Escape") {
+            fetch(`https://${GetParentResourceName()}/escape`, {
+                method: 'POST',
+                body: JSON.stringify({})
+            });
+            QBRadio.SlideDown();
+        } else if (data.key == "Enter") {
+            fetch(`https://${GetParentResourceName()}/joinRadio`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    channel: document.getElementById("channel").value
+                })
+            });
         }
     };
-});
 
-QBRadio = {}
-
-document.getElementById('toggleClicks').addEventListener('click', function (e) {
-    e.preventDefault();
-    fetch(`https://${GetParentResourceName()}/toggleClicks`, {
-        method: 'POST',
+    document.getElementById('toggleClicks').addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch(`https://${GetParentResourceName()}/toggleClicks`, {
+            method: 'POST',
+        });
     });
-});
 
-$(document).on('click', '#submit', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/joinRadio`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-$(document).on('click', '#disconnect', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/leaveRadio`);
-});
-
-$(document).on('click', '#volumeUp', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/volumeUp`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-$(document).on('click', '#volumeDown', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/volumeDown`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-$(document).on('click', '#decreaseradiochannel', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/decreaseradiochannel`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-$(document).on('click', '#increaseradiochannel', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/increaseradiochannel`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-$(document).on('click', '#poweredOff', function(e){
-    e.preventDefault();
-
-    $.post(`https://${GetParentResourceName()}/poweredOff`, JSON.stringify({
-        channel: $("#channel").val()
-    }));
-});
-
-QBRadio.SlideUp = function() {
-    $(".container").css("display", "block");
-    $(".radio-container").animate({bottom: "6vh",}, 250);
-}
-
-QBRadio.SlideDown = function() {
-    $(".radio-container").animate({bottom: "-110vh",}, 400, function(){
-        $(".container").css("display", "none");
+    document.getElementById('submit').addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch(`https://${GetParentResourceName()}/joinRadio`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
     });
-}
+
+    document.getElementById('disconnect').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/leaveRadio`, {
+            method: 'POST'
+        });
+    });
+
+    document.getElementById('volumeUp').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/volumeUp`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
+    });
+
+    document.getElementById('volumeDown').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/volumeDown`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
+    });
+
+    document.getElementById('decreaseradiochannel').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/decreaseradiochannel`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
+    });
+
+    document.getElementById('increaseradiochannel').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/increaseradiochannel`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
+    });
+
+    document.getElementById('poweredOff').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch(`https://${GetParentResourceName()}/poweredOff`, {
+            method: 'POST',
+            body: JSON.stringify({
+                channel: document.getElementById("channel").value
+            })
+        });
+    });
+
+    QBRadio.SlideUp = function () {
+        document.getElementById("container").style.display = "block";
+        document.getElementById("radio-container").animate({ bottom: "6vh" }, 250).onfinish = function () {
+            document.getElementById("radio-container").style.bottom = "6vh";
+        };
+    };
+
+    QBRadio.SlideDown = function () {
+        document.getElementById("radio-container").animate({ bottom: "-110vh" }, 400).onfinish = function () {
+            document.getElementById("container").style.display = "none";
+        };
+    };
+});
