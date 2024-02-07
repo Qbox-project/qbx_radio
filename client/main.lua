@@ -60,6 +60,11 @@ end
 
 exports('IsRadioOn', isRadioOn)
 
+-- Sets mic clicks to the default value when the player logs in.
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    exports['pma-voice']:setVoiceProperty("micClicks", config.defaultMicClicks)
+end)
+
 -- Resets state on logout, in case of character change.
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     leaveradio()

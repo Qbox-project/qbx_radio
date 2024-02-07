@@ -7,4 +7,7 @@ return {
     ---@type number
     -- How many decimal places to use for the subchannel.
     decimalPlaces = 2,
+
+    
+    defaultMicClicks = true
 }

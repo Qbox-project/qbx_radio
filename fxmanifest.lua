@@ -25,8 +25,7 @@ files {
     'html/js/script.js',
     'html/css/style.css',
     'html/img/radio.png',
-    'config/shared.lua',
-    'config/client.lua',
+    'config/*.lua',
     'locales/*.json'
 }
 
