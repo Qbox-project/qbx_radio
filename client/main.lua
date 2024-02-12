@@ -2,16 +2,17 @@ local config = require 'config.client'
 local sharedConfig = require 'config.shared'
 local radioMenu = false
 local onRadio = false
+local onChannel = false
 local radioChannel = 0
 local radioVolume = 50
 local micClicks = config.defaultMicClicks
 
 local function connectToRadio(channel)
     radioChannel = channel
-    if onRadio then
+    if onChannel then
         exports['pma-voice']:setRadioChannel(0)
     else
-        onRadio = true
+        onChannel = true
         exports['pma-voice']:setVoiceProperty('radioEnabled', true)
         qbx.playAudio({
             audioName = 'Start_Squelch',
@@ -27,8 +28,8 @@ local function connectToRadio(channel)
     end
 end
 
-local function leaveradio()
-    if onRadio then
+local function leaveChannel()
+    if onChannel then
         qbx.playAudio({
             audioName = 'End_Squelch',
             audioRef = 'CB_RADIO_SFX',
@@ -37,9 +38,17 @@ local function leaveradio()
         exports.qbx_core:Notify(locale('left_channel'), 'error')
     end
     radioChannel = 0
-    onRadio = false
+    onChannel = false
     exports['pma-voice']:setRadioChannel(0)
     exports['pma-voice']:setVoiceProperty('radioEnabled', false)
+end
+
+local function powerButton()
+    onRadio = not onRadio
+
+    if not onRadio then
+        leaveChannel()
+    end
 end
 
 local function toggleRadio(toggle)
@@ -67,13 +76,13 @@ end)
 
 -- Resets state on logout, in case of character change.
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    leaveradio()
+    powerButton()
 end)
 
 AddEventHandler('ox_inventory:itemCount', function(itemName, totalCount)
     if itemName ~= 'radio' then return end
     if totalCount <= 0 and radioChannel ~= 0 then
-        leaveradio()
+        powerButton()
     end
 end)
 
@@ -83,11 +92,12 @@ end)
 
 RegisterNetEvent('qbx_radio:client:onRadioDrop', function()
     if radioChannel ~= 0 then
-        leaveradio()
+        powerButton()
     end
 end)
 
 RegisterNUICallback('joinRadio', function(data, cb)
+    if not onRadio then return cb('ok') end
     local rchannel = tonumber(data.channel)
     if not rchannel or type(rchannel) ~= "number" or rchannel > config.maxFrequency or rchannel < 1 then
         exports.qbx_core:Notify(locale('invalid_channel'), 'error')
@@ -112,11 +122,12 @@ RegisterNUICallback('joinRadio', function(data, cb)
     connectToRadio(rchannel)
 end)
 
-RegisterNUICallback('leaveRadio', function(_, cb)
+RegisterNUICallback('leaveChannel', function(_, cb)
+    if not onRadio then return cb('ok') end
     if radioChannel == 0 then
         exports.qbx_core:Notify(locale('not_on_channel'), 'error')
     else
-        leaveradio()
+        leaveChannel()
     end
     cb('ok')
 end)
@@ -166,6 +177,7 @@ RegisterNUICallback('decreaseradiochannel', function(_, cb)
 end)
 
 RegisterNUICallback('toggleClicks', function(_, cb)
+    if not onRadio then return cb('ok') end
     micClicks = not micClicks
     exports['pma-voice']:setVoiceProperty("micClicks", micClicks)
     qbx.playAudio({
@@ -177,9 +189,14 @@ RegisterNUICallback('toggleClicks', function(_, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('poweredOff', function(_, cb)
-    leaveradio()
-    cb('ok')
+RegisterNUICallback('powerButton', function(_, cb)
+    qbx.playAudio({
+        audioName = "On_High",
+        audioRef = 'MP_RADIO_SFX',
+        source = cache.ped
+    })
+    powerButton()
+    cb(onRadio and 'on' or 'off')
 end)
 
 RegisterNUICallback('escape', function(_, cb)
@@ -190,7 +207,7 @@ end)
 if config.leaveOnDeath then
     AddStateBagChangeHandler('isDead', ('player:%s'):format(cache.serverId), function(_, _, value)
         if value and onRadio and radioChannel ~= 0 then
-            leaveradio()
+            leaveChannel()
         end
     end)
 end

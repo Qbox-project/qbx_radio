@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
     document.getElementById('disconnect').addEventListener('click', function (e) {
         e.preventDefault();
 
-        fetch(`https://${GetParentResourceName()}/leaveRadio`, {
+        fetch(`https://${GetParentResourceName()}/leaveChannel`, {
             method: 'POST'
         });
     });
@@ -97,14 +97,18 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('poweredOff').addEventListener('click', function (e) {
+    document.getElementById('powerButton').addEventListener('click', function (e) {
         e.preventDefault();
 
-        fetch(`https://${GetParentResourceName()}/poweredOff`, {
+        document.getElementsByClassName("channel")[0].style.display = "none";
+        fetch(`https://${GetParentResourceName()}/powerButton`, {
             method: 'POST',
-            body: JSON.stringify({
-                channel: document.getElementById("channel").value
-            })
+        }).then(response => response.json()).then(data => {
+            if (data == "on") {
+                document.getElementsByClassName("channel")[0].style.display = "block";
+            } else {
+                document.getElementsByClassName("channel")[0].style.display = "none";
+            }
         });
     });
 
