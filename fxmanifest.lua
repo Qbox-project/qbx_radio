@@ -1,5 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
+version '1.0.0'
 
 description 'qbx_radio'
 repository 'https://github.com/Qbox-project/qbx_radio'
