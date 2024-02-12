@@ -1,3 +1,5 @@
+lib.versionCheck('Qbox-project/qbx_radio')
+
 local config = require 'config.shared'
 local restrictedChannels = config.restrictedChannels
 
