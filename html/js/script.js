@@ -83,6 +83,8 @@ window.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({
                 channel: document.getElementById("channel").value
             })
+        }).then(response => response.json()).then(newChannel => {
+            document.getElementById("channel").value = newChannel;
         });
     });
 
@@ -94,6 +96,8 @@ window.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({
                 channel: document.getElementById("channel").value
             })
+        }).then(response => response.json()).then(newChannel => {
+            document.getElementById("channel").value = newChannel;
         });
     });
 

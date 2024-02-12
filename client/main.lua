@@ -163,7 +163,7 @@ RegisterNUICallback('increaseradiochannel', function(_, cb)
     radioChannel += 1
     exports['pma-voice']:setRadioChannel(radioChannel)
     exports.qbx_core:Notify(locale('new_channel')..radioChannel, 'success')
-    cb('ok')
+    cb(radioChannel)
 end)
 
 RegisterNUICallback('decreaseradiochannel', function(_, cb)
@@ -173,7 +173,7 @@ RegisterNUICallback('decreaseradiochannel', function(_, cb)
 
 	exports['pma-voice']:setRadioChannel(radioChannel)
 	exports.qbx_core:Notify(locale('new_channel')..radioChannel, 'success')
-	cb('ok')
+	cb(radioChannel)
 end)
 
 RegisterNUICallback('toggleClicks', function(_, cb)
