@@ -150,3 +150,27 @@ body {
 ::-webkit-inner-spin-button {
 	display: none;
 }
+
+[tooltip]:not([dummy]):before {
+	pointer-events: none;
+}
+
+[tooltip]:not([dummy]):before {
+	position: absolute;
+	content: attr(tooltip);
+	opacity: 0;
+
+	transition: all .3s;
+	padding: 10%;
+	border-radius: 3px;
+	font-family: 'Rubik', sans-serif;
+	font-weight: 600;
+	font-size: .8rem;
+	color: #2d2427;
+	white-space: nowrap;
+}
+
+[tooltip]:not([dummy]):hover:before {
+	opacity: 1;
+	background: #eee;
+}
