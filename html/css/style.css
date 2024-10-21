@@ -72,24 +72,31 @@ body {
 
 #increaseradiochannel,
 #decreaseradiochannel {
-	left: 0.0vh;
+	left: 0vh;
 }
 
 #increaseradiochannel {
-	bottom: 30vh;
+	bottom: 28vh;
 }
 
 #decreaseradiochannel {
-	bottom: 18vh;
+	bottom: 17.5vh;
 }
 
 #volumeDown,
-#volumeUp,
+#volumeUp {
+    position: absolute;
+	width: 3.3vh;
+	height: 1.9vh;
+	border-radius: 5px;
+	transition: all 0.1s linear;
+}
+
 #increaseradiochannel,
 #decreaseradiochannel {
 	position: absolute;
-	width: 3.3vh;
-	height: 1.9vh;
+	width: 2vh;
+	height: 4vh;
 	border-radius: 5px;
 	transition: all 0.1s linear;
 }
