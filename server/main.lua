@@ -69,7 +69,7 @@ end)
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= cache.resource then return end
 
-    for i = 1, #playerRadios do
+    for i in pairs (playerRadios) do
         deleteProp(i)
     end
 end)
