@@ -54,11 +54,32 @@ end
 local function toggleRadio(toggle)
     radioMenu = toggle
     SetNuiFocus(radioMenu, radioMenu)
+
     if radioMenu then
-        exports.scully_emotemenu:playEmoteByCommand('wt')
+        local prop = lib.callback.await('qbx_radio:server:spawnProp', false)
+        local radio = NetworkGetEntityFromNetworkId(prop)
+
+        if DoesEntityExist(radio) then
+            local bone = GetPedBoneIndex(cache.ped, 28422)
+
+            NetworkRequestControlOfEntity(radio)
+
+            lib.waitFor(function()
+                if NetworkGetEntityOwner(radio) == cache.playerId then
+                    return true
+                end
+            end, locale('failed_get_control'), 3000)
+
+            SetEntityCollision(radio, false, false)
+            AttachEntityToEntity(radio, cache.ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
+        end
+
+        lib.playAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 2.0, -1, 51, 0.0, false, 0, false)
         SendNUIMessage({type = 'open'})
     else
-        exports.scully_emotemenu:cancelEmote()
+        ClearPedTasks(cache.ped)
+        DetachEntity(cache.ped, true, false)
+        TriggerServerEvent('qbx_radio:server:deleteProp')
         SendNUIMessage({type = 'close'})
     end
 end
