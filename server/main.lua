@@ -43,13 +43,11 @@ lib.callback.register('qbx_radio:server:spawnProp', function(source)
     local coords = GetEntityCoords(ped)
     local object = CreateObject(`prop_cs_hand_radio`, coords.x, coords.y, coords.z, true, false, false)
 
-    local propExists = lib.waitFor(function()
+    lib.waitFor(function()
         if DoesEntityExist(object) then
             return true
         end
     end, locale('failed_spawn'), 2000)
-
-    if not propExists then return end
 
     playerRadios[source] = object
 

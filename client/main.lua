@@ -62,15 +62,13 @@ local function toggleRadio(toggle)
         if DoesEntityExist(radio) then
             local bone = GetPedBoneIndex(cache.ped, 28422)
 
-            local hasControl = lib.waitFor(function()
-                local isOwner = NetworkGetEntityOwner(radio) == cache.playerId
+            NetworkRequestControlOfEntity(radio)
 
-                if isOwner then return true end
-
-                NetworkRequestControlOfEntity(radio)
+            lib.waitFor(function()
+                if NetworkGetEntityOwner(radio) == cache.playerId then
+                    return true
+                end
             end, locale('failed_get_control'), 3000)
-
-            if not hasControl then return end
 
             SetEntityCollision(radio, false, false)
             AttachEntityToEntity(radio, cache.ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
