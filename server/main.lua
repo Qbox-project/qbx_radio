@@ -48,7 +48,7 @@ lib.callback.register('qbx_radio:server:spawnProp', function(source)
         if DoesEntityExist(object) then
             return true
         end
-    end, locale('failed_spawn'), 2000)
+    end, locale('failed_spawn'), 3000)
 
     playerRadios[source] = object
 
