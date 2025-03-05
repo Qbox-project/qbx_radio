@@ -87,6 +87,13 @@ local function toggleRadio(toggle)
 
     if radioMenu then
         local prop = lib.callback.await('qbx_radio:server:spawnProp', false)
+
+        lib.waitFor(function()
+            if NetworkDoesNetworkIdExist(prop) then -- Waits for object to exist on client
+                return true
+            end
+        end, locale('failed_spawn'), 2000)
+
         local radio = NetworkGetEntityFromNetworkId(prop)
 
         if DoesEntityExist(radio) then
