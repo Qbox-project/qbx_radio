@@ -11,6 +11,5 @@
     "new_channel": "New channel: ",
     "clicksOn": "Mic clicks are now on",
     "clicksOff": "Mic clicks are now off",
-    "failed_spawn": "Failed to spawn radioprop",
-    "failed_get_control": "Failed to gain control of radio prop"
+    "failed_spawn": "Failed to spawn radioprop"
 }
