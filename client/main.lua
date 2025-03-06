@@ -5,6 +5,7 @@ local onRadio = false
 local onChannel = false
 local radioChannel = 0
 local radioVolume = 50
+local Radios = {}
 local micClicks = config.defaultMicClicks
 
 local function connectToRadio(channel)
@@ -85,34 +86,60 @@ local function toggleRadio(toggle)
     radioMenu = toggle
     SetNuiFocus(radioMenu, radioMenu)
 
+    TriggerServerEvent('qbx_radio:server:setHoldingRadio', radioMenu)
     if radioMenu then
-        local prop = lib.callback.await('qbx_radio:server:spawnProp', false)
-        local radio = NetworkGetEntityFromNetworkId(prop)
-
-        if DoesEntityExist(radio) then
-            local bone = GetPedBoneIndex(cache.ped, 28422)
-
-            NetworkRequestControlOfEntity(radio)
-
-            lib.waitFor(function()
-                if NetworkGetEntityOwner(radio) == cache.playerId then
-                    return true
-                end
-            end, locale('failed_get_control'), 3000)
-
-            SetEntityCollision(radio, false, false)
-            AttachEntityToEntity(radio, cache.ped, bone, -0.01, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
-        end
-
         lib.playAnim(cache.ped, 'cellphone@', 'cellphone_text_read_base', 2.0, 2.0, -1, 51, 0.0, false, 0, false)
         SendNUIMessage({type = 'open'})
     else
         ClearPedTasks(cache.ped)
-        DetachEntity(cache.ped, true, false)
-        TriggerServerEvent('qbx_radio:server:deleteProp')
         SendNUIMessage({type = 'close'})
     end
 end
+
+local function cleanupRadioProp(serverId)
+    if not Radios[serverId] then return end
+    SetEntityAsMissionEntity(Radios[serverId], true, true)
+    DeleteEntity(Radios[serverId])
+    Radios[serverId] = nil
+end
+
+AddStateBagChangeHandler('isHoldingRadio', '', function(bagName, _, value, _, replicated)
+    if replicated then return end
+
+    local player = GetPlayerFromStateBagName(bagName)
+    if not player then return end
+
+    local serverId = GetPlayerServerId(player)
+
+    if value then
+        local model = lib.requestModel(`prop_cs_hand_radio`)
+        if not model then return end
+
+        local ped = lib.waitFor(function ()
+            local playerPed = GetPlayerPed(player)
+            if playerPed > 0 then return playerPed end
+        end, locale('failed_spawn'), 3000)
+
+        local coords = GetEntityCoords(ped)
+        Radios[serverId] = CreateObject(model, coords.x, coords.y, coords.z, false, false, false)
+        AttachEntityToEntity(Radios[serverId], ped, GetPedBoneIndex(ped, 28422), -0.01, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
+        SetModelAsNoLongerNeeded(model)
+    else
+        cleanupRadioProp(serverId)
+    end
+end)
+
+RegisterNetEvent('onPlayerDropped', function(serverId)
+    cleanupRadioProp(serverId)
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= cache.resource then return end
+
+    for serverId in pairs(Radios) do
+        cleanupRadioProp(serverId)
+    end
+end)
 
 local function powerButton()
     onRadio = not onRadio
